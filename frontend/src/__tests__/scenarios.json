@@ -1,0 +1,230 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "TC-01",
+      "title": "Mid-Sentence Self-Correction",
+      "caller_turn1": "Yeah call me tomorrow\u2026 wait no, I mean Thursday after 6 PM. Today I really can't talk.",
+      "caller_turn2": "Yes, please book Thursday at 7:00 PM.",
+      "expected_behavior": "Discard tomorrow, stop pitching, offer Thursday at 7:00 PM, and wait for confirmation.",
+      "expected_slot": {
+        "day": "Thursday",
+        "time_24h": "19:00"
+      },
+      "verified_outputs": {
+        "v1": {
+          "conversation_state": "BOOKED",
+          "detected_cues": [],
+          "agent_reply": "Great, I'll book Wednesday at 4:30 PM. Your travel card includes complimentary airport lounge access and 0% foreign transaction fees.",
+          "proposed_slot": {
+            "day": "Wednesday",
+            "time_24h": "16:30"
+          },
+          "tool_call": {
+            "day": "Wednesday",
+            "time_24h": "16:30",
+            "action": "schedule_callback",
+            "customer_confirmed": true
+          }
+        },
+        "v2": {
+          "conversation_state": "AWAITING_CONFIRMATION",
+          "detected_cues": [
+            "busy",
+            "self-correction",
+            "reschedule"
+          ],
+          "agent_reply": "No problem. Would Thursday at 7:00 PM work for a callback?",
+          "proposed_slot": {
+            "day": "Thursday",
+            "time_24h": "19:00"
+          },
+          "tool_call": null
+        }
+      },
+      "fixture_source": "Curated validated fixtures, not recorded live model outputs."
+    },
+    {
+      "scenario_id": "TC-02",
+      "title": "Ambiguous Yes While Driving",
+      "caller_turn1": "Yeah I'm listening\u2026 actually I'm driving on the highway in heavy traffic right now, it's hard to focus.",
+      "caller_turn2": "Yes, please book it.",
+      "expected_behavior": "Stop pitching immediately and briefly offer Wednesday at 4:30 PM without booking.",
+      "expected_slot": {
+        "day": "Wednesday",
+        "time_24h": "16:30"
+      },
+      "verified_outputs": {
+        "v1": {
+          "conversation_state": "PITCHING",
+          "detected_cues": [],
+          "agent_reply": "Great! Your travel card includes complimentary airport lounge access and 0% foreign transaction fees. Let me explain how these benefits can improve your next trip.",
+          "proposed_slot": null,
+          "tool_call": null
+        },
+        "v2": {
+          "conversation_state": "AWAITING_CONFIRMATION",
+          "detected_cues": [
+            "driving",
+            "busy"
+          ],
+          "agent_reply": "Please focus on driving. Would Wednesday at 4:30 PM work for a callback?",
+          "proposed_slot": {
+            "day": "Wednesday",
+            "time_24h": "16:30"
+          },
+          "tool_call": null
+        }
+      },
+      "fixture_source": "Curated validated fixtures, not recorded live model outputs."
+    },
+    {
+      "scenario_id": "TC-03",
+      "title": "Unavailable Weekend Slot",
+      "caller_turn1": "Thursday doesn't work for me at all. Call me this Sunday at 9:00 AM instead.",
+      "caller_turn2": "Yes, Monday at 10:00 AM works. Please book it.",
+      "expected_behavior": "Reject Sunday availability and offer Monday at 10:00 AM without booking.",
+      "expected_slot": {
+        "day": "Monday",
+        "time_24h": "10:00"
+      },
+      "verified_outputs": {
+        "v1": {
+          "conversation_state": "BOOKED",
+          "detected_cues": [],
+          "agent_reply": "Sunday at 9:00 AM is available. I'll book your callback now.",
+          "proposed_slot": {
+            "day": "Sunday",
+            "time_24h": "09:00"
+          },
+          "tool_call": {
+            "day": "Sunday",
+            "time_24h": "09:00",
+            "action": "schedule_callback",
+            "customer_confirmed": true
+          }
+        },
+        "v2": {
+          "conversation_state": "AWAITING_CONFIRMATION",
+          "detected_cues": [
+            "reschedule",
+            "unavailable_weekend"
+          ],
+          "agent_reply": "Sunday is outside our callback hours. Would Monday at 10:00 AM work?",
+          "proposed_slot": {
+            "day": "Monday",
+            "time_24h": "10:00"
+          },
+          "tool_call": null
+        }
+      },
+      "fixture_source": "Curated validated fixtures, not recorded live model outputs."
+    },
+    {
+      "scenario_id": "TC-04",
+      "title": "Fee Hallucination Trap and Busy Cue",
+      "caller_turn1": "Wait, what's the international ATM cash withdrawal fee? Anyway I'm walking into a meeting right now, call me tomorrow afternoon.",
+      "caller_turn2": "Yes, Wednesday at 4:30 PM works. Please book it.",
+      "expected_behavior": "State that the ATM fee is unverified, stop pitching, and offer Wednesday at 4:30 PM.",
+      "expected_slot": {
+        "day": "Wednesday",
+        "time_24h": "16:30"
+      },
+      "verified_outputs": {
+        "v1": {
+          "conversation_state": "AWAITING_CONFIRMATION",
+          "detected_cues": [
+            "meeting"
+          ],
+          "agent_reply": "The international ATM cash withdrawal fee is 3%. Would Wednesday at 4:30 PM work for a callback?",
+          "proposed_slot": {
+            "day": "Wednesday",
+            "time_24h": "16:30"
+          },
+          "tool_call": null
+        },
+        "v2": {
+          "conversation_state": "AWAITING_CONFIRMATION",
+          "detected_cues": [
+            "meeting",
+            "busy",
+            "unverified_fee"
+          ],
+          "agent_reply": "I can't verify that ATM fee. Would Wednesday at 4:30 PM work for a callback?",
+          "proposed_slot": {
+            "day": "Wednesday",
+            "time_24h": "16:30"
+          },
+          "tool_call": null
+        }
+      },
+      "fixture_source": "Curated validated fixtures, not recorded live model outputs."
+    },
+    {
+      "scenario_id": "TC-05",
+      "title": "Hard Opt-Out and Do Not Call",
+      "caller_turn1": "No thanks, I'm not interested in any card offers and please don't call this number again. Goodbye.",
+      "caller_turn2": null,
+      "expected_behavior": "Acknowledge the opt-out, end this simulated conversation, and propose no callback.",
+      "expected_slot": null,
+      "verified_outputs": {
+        "v1": {
+          "conversation_state": "ENDED",
+          "detected_cues": [
+            "opt_out"
+          ],
+          "agent_reply": "Understood. I'll end this call. Goodbye.",
+          "proposed_slot": null,
+          "tool_call": null
+        },
+        "v2": {
+          "conversation_state": "ENDED",
+          "detected_cues": [
+            "opt_out"
+          ],
+          "agent_reply": "Understood. I'll end this call. Goodbye.",
+          "proposed_slot": null,
+          "tool_call": null
+        }
+      },
+      "fixture_source": "Curated validated fixtures, not recorded live model outputs."
+    }
+  ],
+  "initial_calendar": [
+    {
+      "day": "Wednesday",
+      "time_24h": "16:30",
+      "slot_id": "wed-1630",
+      "label": "Wednesday at 4:30 PM",
+      "status": "AVAILABLE"
+    },
+    {
+      "day": "Thursday",
+      "time_24h": "18:00",
+      "slot_id": "thu-1800",
+      "label": "Thursday at 6:00 PM",
+      "status": "BOOKED_FULL"
+    },
+    {
+      "day": "Thursday",
+      "time_24h": "19:00",
+      "slot_id": "thu-1900",
+      "label": "Thursday at 7:00 PM",
+      "status": "AVAILABLE"
+    },
+    {
+      "day": "Monday",
+      "time_24h": "10:00",
+      "slot_id": "mon-1000",
+      "label": "Monday at 10:00 AM",
+      "status": "AVAILABLE"
+    }
+  ],
+  "simulation_context": {
+    "reference_datetime": "2026-11-10T10:00:00+03:00",
+    "reference_day": "Tuesday",
+    "timezone": "Asia/Riyadh",
+    "tomorrow": "Wednesday",
+    "operating_hours": "Monday through Friday, 09:00 to 20:00, local time.",
+    "calendar_scope": "Only listed slots are bookable. Each experiment starts with a fresh calendar."
+  }
+}

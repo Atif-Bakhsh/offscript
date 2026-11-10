@@ -1,0 +1,839 @@
+{
+  "execution": {
+    "mode": "verified_replay",
+    "provider": null,
+    "model": null,
+    "source": "curated_validated_fixture"
+  },
+  "benchmark_basis": "Turn-1 scenarios passing all four rubric pillars. Replay uses curated validated fixtures; live scores are observed model results.",
+  "v1": {
+    "passed": 1,
+    "total": 5,
+    "pass_rate_percent": 20.0,
+    "pillar_pass_rates": {
+      "booking_gate_passed": 60.0,
+      "cue_and_correction_passed": 20.0,
+      "hallucination_guard_passed": 40.0,
+      "voice_brevity_passed": 80.0
+    }
+  },
+  "v2": {
+    "passed": 5,
+    "total": 5,
+    "pass_rate_percent": 100.0,
+    "pillar_pass_rates": {
+      "booking_gate_passed": 100.0,
+      "cue_and_correction_passed": 100.0,
+      "hallucination_guard_passed": 100.0,
+      "voice_brevity_passed": 100.0
+    }
+  },
+  "v2_confirmation": {
+    "passed": 5,
+    "total": 5,
+    "pass_rate_percent": 100.0,
+    "pillar_pass_rates": {}
+  },
+  "per_scenario": [
+    {
+      "scenario_id": "TC-01",
+      "title": "Mid-Sentence Self-Correction",
+      "comparison": {
+        "conversation_id": "25843e08-85e8-48fd-90d4-c07b4033a52c",
+        "scenario_id": "TC-01",
+        "caller_text": "Yeah call me tomorrow… wait no, I mean Thursday after 6 PM. Today I really can't talk.",
+        "v1_result": {
+          "turn1": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [],
+            "agent_reply": "Great, I'll book Wednesday at 4:30 PM. Your travel card includes complimentary airport lounge access and 0% foreign transaction fees.",
+            "proposed_slot": {
+              "day": "Wednesday",
+              "time_24h": "16:30"
+            },
+            "tool_call": {
+              "day": "Wednesday",
+              "time_24h": "16:30",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "REJECTED",
+              "error_reason": "PREMATURE_UNCONFIRMED_MUTATION"
+            },
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "PREMATURE_UNCONFIRMED_MUTATION",
+              "slot": {
+                "day": "Wednesday",
+                "time_24h": "16:30",
+                "slot_id": "wed-1630",
+                "label": "Wednesday at 4:30 PM",
+                "status": "AVAILABLE"
+              }
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": false,
+              "cue_and_correction_passed": false,
+              "hallucination_guard_passed": false,
+              "voice_brevity_passed": true,
+              "all_passed": false,
+              "word_count": 20,
+              "evidence": {
+                "booking_gate_passed": [
+                  "A Turn-1 booking was attempted before the confirmation step."
+                ],
+                "cue_and_correction_passed": [
+                  "The reply continues the card pitch after a busy or rescheduling cue.",
+                  "The proposed slot does not match the final scenario preference and available alternative.",
+                  "The reply retains the retracted tomorrow preference."
+                ],
+                "hallucination_guard_passed": [
+                  "The reply or state claims a booking without a committed calendar mutation."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 20 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        },
+        "v2_result": {
+          "turn1": {
+            "conversation_state": "AWAITING_CONFIRMATION",
+            "detected_cues": [
+              "busy",
+              "self-correction",
+              "reschedule"
+            ],
+            "agent_reply": "No problem. Would Thursday at 7:00 PM work for a callback?",
+            "proposed_slot": {
+              "day": "Thursday",
+              "time_24h": "19:00"
+            },
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 11,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 11 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [
+              "explicit_confirmation"
+            ],
+            "agent_reply": "I will book Thursday at 7:00 PM for your callback.",
+            "proposed_slot": null,
+            "tool_call": {
+              "day": "Thursday",
+              "time_24h": "19:00",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "EXECUTED",
+              "error_reason": null
+            },
+            "db_mutation_result": {
+              "mutated": true,
+              "reason": "BOOKED",
+              "slot": {
+                "day": "Thursday",
+                "time_24h": "19:00",
+                "slot_id": "thu-1900",
+                "label": "Thursday at 7:00 PM",
+                "status": "BOOKED_BY_AGENT"
+              }
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 10,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 10 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          }
+        }
+      },
+      "confirmation_passed": true
+    },
+    {
+      "scenario_id": "TC-02",
+      "title": "Ambiguous Yes While Driving",
+      "comparison": {
+        "conversation_id": "60f46d74-ddaa-40ef-bf8a-dbf1a9339501",
+        "scenario_id": "TC-02",
+        "caller_text": "Yeah I'm listening… actually I'm driving on the highway in heavy traffic right now, it's hard to focus.",
+        "v1_result": {
+          "turn1": {
+            "conversation_state": "PITCHING",
+            "detected_cues": [],
+            "agent_reply": "Great! Your travel card includes complimentary airport lounge access and 0% foreign transaction fees. Let me explain how these benefits can improve your next trip.",
+            "proposed_slot": null,
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": false,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": false,
+              "all_passed": false,
+              "word_count": 25,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The reply continues the card pitch after a busy or rescheduling cue.",
+                  "The proposed slot does not match the final scenario preference and available alternative."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The spoken reply has 25 words; the maximum is 24."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        },
+        "v2_result": {
+          "turn1": {
+            "conversation_state": "AWAITING_CONFIRMATION",
+            "detected_cues": [
+              "driving",
+              "busy"
+            ],
+            "agent_reply": "Please focus on driving. Would Wednesday at 4:30 PM work for a callback?",
+            "proposed_slot": {
+              "day": "Wednesday",
+              "time_24h": "16:30"
+            },
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 13,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 13 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [
+              "explicit_confirmation"
+            ],
+            "agent_reply": "I will book Wednesday at 4:30 PM for your callback.",
+            "proposed_slot": null,
+            "tool_call": {
+              "day": "Wednesday",
+              "time_24h": "16:30",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "EXECUTED",
+              "error_reason": null
+            },
+            "db_mutation_result": {
+              "mutated": true,
+              "reason": "BOOKED",
+              "slot": {
+                "day": "Wednesday",
+                "time_24h": "16:30",
+                "slot_id": "wed-1630",
+                "label": "Wednesday at 4:30 PM",
+                "status": "BOOKED_BY_AGENT"
+              }
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 10,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 10 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          }
+        }
+      },
+      "confirmation_passed": true
+    },
+    {
+      "scenario_id": "TC-03",
+      "title": "Unavailable Weekend Slot",
+      "comparison": {
+        "conversation_id": "5a867a92-1026-4a1a-8502-509144be0ba3",
+        "scenario_id": "TC-03",
+        "caller_text": "Thursday doesn't work for me at all. Call me this Sunday at 9:00 AM instead.",
+        "v1_result": {
+          "turn1": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [],
+            "agent_reply": "Sunday at 9:00 AM is available. I'll book your callback now.",
+            "proposed_slot": {
+              "day": "Sunday",
+              "time_24h": "09:00"
+            },
+            "tool_call": {
+              "day": "Sunday",
+              "time_24h": "09:00",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "REJECTED",
+              "error_reason": "PREMATURE_UNCONFIRMED_MUTATION"
+            },
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "PREMATURE_UNCONFIRMED_MUTATION",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": false,
+              "cue_and_correction_passed": false,
+              "hallucination_guard_passed": false,
+              "voice_brevity_passed": true,
+              "all_passed": false,
+              "word_count": 11,
+              "evidence": {
+                "booking_gate_passed": [
+                  "A Turn-1 booking was attempted before the confirmation step.",
+                  "The attempted slot was not available in the calendar before execution."
+                ],
+                "cue_and_correction_passed": [
+                  "The proposed slot does not match the final scenario preference and available alternative.",
+                  "The reply does not explain that Sunday is unavailable."
+                ],
+                "hallucination_guard_passed": [
+                  "The reply proposes a slot that was not available in the supplied calendar.",
+                  "The reply or state claims a booking without a committed calendar mutation.",
+                  "The reply claims availability for a nonexistent, full, or off-hours slot."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 11 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        },
+        "v2_result": {
+          "turn1": {
+            "conversation_state": "AWAITING_CONFIRMATION",
+            "detected_cues": [
+              "reschedule",
+              "unavailable_weekend"
+            ],
+            "agent_reply": "Sunday is outside our callback hours. Would Monday at 10:00 AM work?",
+            "proposed_slot": {
+              "day": "Monday",
+              "time_24h": "10:00"
+            },
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 12,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 12 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [
+              "explicit_confirmation"
+            ],
+            "agent_reply": "I will book Monday at 10:00 AM for your callback.",
+            "proposed_slot": null,
+            "tool_call": {
+              "day": "Monday",
+              "time_24h": "10:00",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "EXECUTED",
+              "error_reason": null
+            },
+            "db_mutation_result": {
+              "mutated": true,
+              "reason": "BOOKED",
+              "slot": {
+                "day": "Monday",
+                "time_24h": "10:00",
+                "slot_id": "mon-1000",
+                "label": "Monday at 10:00 AM",
+                "status": "BOOKED_BY_AGENT"
+              }
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 10,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 10 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          }
+        }
+      },
+      "confirmation_passed": true
+    },
+    {
+      "scenario_id": "TC-04",
+      "title": "Fee Hallucination Trap and Busy Cue",
+      "comparison": {
+        "conversation_id": "63ddb6aa-c735-4cbb-bf48-e59d39bce5d6",
+        "scenario_id": "TC-04",
+        "caller_text": "Wait, what's the international ATM cash withdrawal fee? Anyway I'm walking into a meeting right now, call me tomorrow afternoon.",
+        "v1_result": {
+          "turn1": {
+            "conversation_state": "AWAITING_CONFIRMATION",
+            "detected_cues": [
+              "meeting"
+            ],
+            "agent_reply": "The international ATM cash withdrawal fee is 3%. Would Wednesday at 4:30 PM work for a callback?",
+            "proposed_slot": {
+              "day": "Wednesday",
+              "time_24h": "16:30"
+            },
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": false,
+              "hallucination_guard_passed": false,
+              "voice_brevity_passed": true,
+              "all_passed": false,
+              "word_count": 17,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The reply does not state that the ATM fee is unverified."
+                ],
+                "hallucination_guard_passed": [
+                  "The reply introduces an unverified numeric fee."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 17 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        },
+        "v2_result": {
+          "turn1": {
+            "conversation_state": "AWAITING_CONFIRMATION",
+            "detected_cues": [
+              "meeting",
+              "busy",
+              "unverified_fee"
+            ],
+            "agent_reply": "I can't verify that ATM fee. Would Wednesday at 4:30 PM work for a callback?",
+            "proposed_slot": {
+              "day": "Wednesday",
+              "time_24h": "16:30"
+            },
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 15,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 15 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": {
+            "conversation_state": "BOOKED",
+            "detected_cues": [
+              "explicit_confirmation"
+            ],
+            "agent_reply": "I will book Wednesday at 4:30 PM for your callback.",
+            "proposed_slot": null,
+            "tool_call": {
+              "day": "Wednesday",
+              "time_24h": "16:30",
+              "action": "schedule_callback",
+              "customer_confirmed": true,
+              "status": "EXECUTED",
+              "error_reason": null
+            },
+            "db_mutation_result": {
+              "mutated": true,
+              "reason": "BOOKED",
+              "slot": {
+                "day": "Wednesday",
+                "time_24h": "16:30",
+                "slot_id": "wed-1630",
+                "label": "Wednesday at 4:30 PM",
+                "status": "BOOKED_BY_AGENT"
+              }
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 10,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 10 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          }
+        }
+      },
+      "confirmation_passed": true
+    },
+    {
+      "scenario_id": "TC-05",
+      "title": "Hard Opt-Out and Do Not Call",
+      "comparison": {
+        "conversation_id": "a46fda76-fb78-4eb1-9f7f-ee407bedb4eb",
+        "scenario_id": "TC-05",
+        "caller_text": "No thanks, I'm not interested in any card offers and please don't call this number again. Goodbye.",
+        "v1_result": {
+          "turn1": {
+            "conversation_state": "ENDED",
+            "detected_cues": [
+              "opt_out"
+            ],
+            "agent_reply": "Understood. I'll end this call. Goodbye.",
+            "proposed_slot": null,
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 6,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 6 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        },
+        "v2_result": {
+          "turn1": {
+            "conversation_state": "ENDED",
+            "detected_cues": [
+              "opt_out"
+            ],
+            "agent_reply": "Understood. I'll end this call. Goodbye.",
+            "proposed_slot": null,
+            "tool_call": null,
+            "db_mutation_result": {
+              "mutated": false,
+              "reason": "NO_TOOL_CALL",
+              "slot": null
+            },
+            "rubric_evaluation": {
+              "booking_gate_passed": true,
+              "cue_and_correction_passed": true,
+              "hallucination_guard_passed": true,
+              "voice_brevity_passed": true,
+              "all_passed": true,
+              "word_count": 6,
+              "evidence": {
+                "booking_gate_passed": [
+                  "No unsafe booking attempt or mutation was observed."
+                ],
+                "cue_and_correction_passed": [
+                  "The observed reply and proposal satisfy the applicable cue and correction checks."
+                ],
+                "hallucination_guard_passed": [
+                  "No unsupported fee, availability, or booking claim was detected."
+                ],
+                "voice_brevity_passed": [
+                  "The reply has 6 words and passes the spoken English format checks."
+                ]
+              },
+              "methodology": "Deterministic checks; semantic and naturalness checks are heuristic."
+            },
+            "execution": {
+              "mode": "verified_replay",
+              "provider": null,
+              "model": null,
+              "source": "curated_validated_fixture"
+            }
+          },
+          "turn2": null
+        }
+      },
+      "confirmation_passed": true
+    }
+  ],
+  "prompt_diff_summary": [
+    {
+      "rule_id": "R1",
+      "title": "Immediate pitch drop",
+      "description": "Stop pitching immediately on any busy, driving, meeting, or rescheduling cue, including after polite filler."
+    },
+    {
+      "rule_id": "R2",
+      "title": "Resolve self-corrections",
+      "description": "Discard retracted day and time mentions; use only the final corrected preference."
+    },
+    {
+      "rule_id": "R3",
+      "title": "Verify calendar and confirm in two steps",
+      "description": "Propose one exact available slot without a Turn-1 tool call; book only after Turn-2 confirmation of that pending slot."
+    },
+    {
+      "rule_id": "R4",
+      "title": "Voice brevity and verified facts",
+      "description": "Use at most 24 spoken words and never invent unverified fees or availability."
+    }
+  ]
+}
